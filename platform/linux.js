@@ -29,8 +29,13 @@ class SayPlatformLinux extends SayPlatformBase {
     return {command: COMMAND, args, pipedData, options}
   }
 
-  buildExportCommand ({text, voice, speed, filename}) {
-    throw new Error(`say.export(): does not support platform ${this.platform}`)
+  buildExportCommand ({text, voice, speed, filename, dataFormatInfo}) {
+    var args = ['-o', filename];
+    if (dataFormatInfo.sampleRate) {
+      args.push('-F', dataFormatInfo.sampleRate);
+    }
+    args.push('-');
+    return {command: 'text2wave', args, pipedData: text, options: {}};
   }
 
   runStopCommand () {
